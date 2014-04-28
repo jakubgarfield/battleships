@@ -3,7 +3,7 @@ class Player < ActiveRecord::Base
   has_many :guesses
   belongs_to :game
 
-  validate :game_id, :name, :presence => true
+  validate :game_id, :name, :active, :presence => true
   validate :name, :allow_blank => false 
 
   def opponent
