@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   resources :games, :only => [:index, :show, :create] do
-    #resources :players
+    resources :players, :only => [:index, :create, :show, :update]
   end
 
-  root = 'games#index'
+  root 'games#index'
  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

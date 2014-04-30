@@ -7,7 +7,7 @@ class GamesController < ApplicationController
   def create
     @game = Game.new(params[:game])
     if @game.save
-      redirect_to @game
+      redirect_to game_players_path(@game)  
     else
       render 'index'
     end

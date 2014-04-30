@@ -3,7 +3,7 @@ class Game < ActiveRecord::Base
   accepts_nested_attributes_for :players 
 
   def finished?
-    winner.nil?
+    !winner.nil?
   end
 
   def waiting_for_players?
