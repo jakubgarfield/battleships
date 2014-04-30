@@ -1,0 +1,30 @@
+<h1>Battleships</h1>
+
+<p>Behold the greatest game of all times.</p>
+
+<% if @joinable_games.any? %>
+  <h2>Join</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Waiting Player</th>
+        <th>Join</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @joinable_games.each do |game| %>
+        <tr>
+          <td><%= game.id %></td>
+          <td><%= game.players.any? ? game.players.first.name : "" %></td>
+          <td>Start</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<h2>Create</h2>
+<%= form_for @game do |f| %>
+  <p><%= f.submit "Create" %></p>
+<% end %>

@@ -1,11 +1,12 @@
 class Game < ActiveRecord::Base
   has_many :players
+  accepts_nested_attributes_for :players 
 
   def finished?
     winner.nil?
   end
 
-  def waiting_for_opponent?
+  def waiting_for_players?
     self.players.length < 2
   end
 
