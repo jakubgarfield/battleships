@@ -4,6 +4,10 @@ class PlayersController < ApplicationController
     @game = Game.find(params[:game_id])
   end
 
+  def show
+    player = Player.find(params[:id])
+  end
+
   def create
     game = Game.find(params[:game_id])
     player = game.players.build(params[:player].permit(:name))

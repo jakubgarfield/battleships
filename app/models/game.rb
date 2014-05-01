@@ -11,7 +11,7 @@ class Game < ActiveRecord::Base
   end
 
   def winner
-    self.players.first(&:won)
+    self.players.first(&:won?)
   end
 
 end

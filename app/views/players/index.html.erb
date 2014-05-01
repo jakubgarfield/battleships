@@ -1,13 +1,18 @@
-<h1>Mighty heroes in game #<%= @game.id %></h1>
+<h1>Mighty warriors in the game #<%= @game.id %></h1>
 
 <% if @game.waiting_for_players? %>
+  <h2>Ready for battle?</h2>
   <%= form_for [@game, @game.players.build] do |f| %>
     <p>Your name, sir <%= f.text_field :name %></p>
     <p><%= f.submit "Join" %></p>
   <% end %>
 <% end %>
 
-<% if @game.players.any? %>
-  <h2>Already in the game</h2>
-  <p><%= @game.players.map { |player| player.name }.join(', ') %></p>
+<% if @game.players.select(&:persisted?).any? %>
+  <h2>Existing players</h2>
+  <ul>
+  <% @game.players.select(&:persisted?).each do |player| %>
+    <li><%= link_to player.name, game_player_path(@game, player) %></li>
+  <% end %>
+  </ul>
 <% end %>
