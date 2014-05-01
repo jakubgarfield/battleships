@@ -1,5 +1,11 @@
 <h1><%= @player.name %></h1>
 
+<% if @player.active %>
+  <h2>It's your turn</h2>
+<% else %>
+  <h2>Waiting for opponent's turn</h2>
+<% end %>
+
 <h2>My Ships</h2>
 <ul>
 <% @player.ships.each do |ship| %>

@@ -10,7 +10,10 @@ class PlayersController < ApplicationController
 
   def create
     game = Game.find(params[:game_id])
-    player = game.players.create!(params[:player].permit(:name))
+    
+    player = game.players.build(params[:player].permit(:name))
+    player.active = game.players.length < 2
+    player.save!
     
     generate_random_ships(player)
 
