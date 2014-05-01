@@ -4,13 +4,12 @@ class Ship < ActiveRecord::Base
   validates :player_id, :start_coordinate_x, :start_coordinate_y, :end_coordinate_x, :end_coordinate_y, :presence => true
   validates :start_coordinate_x, :start_coordinate_y, :end_coordinate_x, :end_coordinate_y, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0, :less_than => 10 }
 
-  def self.random
-    start_x = random(10)
-    start_y = random(10)
-    is_vertical = random(2) == 0
-    end_x = is_vertical ? start_x : compute_ending_coordinate(start_x, length)
-    end_y = is_vertical ? compute_ending_coordinate(start_y, length) : start_y 
-    Ship.new(:start_coordinate_x => start_x, :start_coordinate_y => start_y, :end_coordinate_x => end_x, :end_coordinate_y => end_y)
+  def randomize(length)
+    self.start_coordinate_x = rand(10)
+    self.start_coordinate_y = rand(10)
+    is_vertical = rand(2) == 0
+    self.end_coordinate_x = is_vertical ? self.start_coordinate_x : ending_coordinate(self.start_coordinate_x, length)
+    self.end_coordinate_y = is_vertical ? ending_coordinate(self.start_coordinate_y, length) : self.start_coordinate_y 
   end
 
   def sunk?
@@ -32,5 +31,9 @@ class Ship < ActiveRecord::Base
   
   def y_coordinates
     self.start_coordinate_y..self.end_coordinate_y
+  end
+
+  def ending_coordinate(start, length)
+    start + length - 1
   end
 end

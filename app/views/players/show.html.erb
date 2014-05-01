@@ -1,1 +1,8 @@
-<h1>Show Player</h1>
+<h1><%= @player.name %></h1>
+
+<h2>My Ships</h2>
+<ul>
+<% @player.ships.each do |ship| %>
+  <li>[<%= ship.start_coordinate_x %>, <%= ship.start_coordinate_y %>] [<%= ship.end_coordinate_x %>, <%= ship.end_coordinate_y %>]</li>
+<% end %>
+</ul>

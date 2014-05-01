@@ -8,10 +8,6 @@ class Player < ActiveRecord::Base
   
   SHIPS = [5, 4, 3, 2, 2, 1, 1]
 
-  def generate_ships
-    SHIPS.each(&:place_ship_randomly)
-  end
-
   def opponent
     game.players.select { |i| i.id != id }.first
   end
@@ -21,22 +17,25 @@ class Player < ActiveRecord::Base
   end
 
   def can_place_ship?(ship)
-    [ship.start_coordinate_x, ship.start_coordinate_y, ship.end_coordinate_x, ship.end_coordinate_y].all(&:coordinate_in_range?)
-    && !ship.occupied_points.any? { |point| self.ships.occupied_points.include?(point) }
+    coordinates_in_range?(ship) && free_sea?(ship)
   end
 
   protected
   def place_ship_randomly(length)   
-    ship = Ship.random until can_place_ship?(ship)
-    self.ships << ship
+    ship = self.ships.build
+    ship.randomize(length) until can_place_ship?(ship)
     self.save!
   end
 
-  def compute_ending_coordinate(start, length)
-    start + length - 1
+  def coordinate_in_range?(coordinate)
+    coordinate && coordinate < Game::CANVAS_SIZE && coordinate >= 0
   end
 
-  def coordinate_in_range?(coordinate)
-    coordinate < Game.CANVAS_SIZE && coordinate >= 0
+  def coordinates_in_range?(ship)
+    [ship.start_coordinate_x, ship.start_coordinate_y, ship.end_coordinate_x, ship.end_coordinate_y].all? { |coordinate| coordinate_in_range?(coordinate) }
+  end
+
+  def free_sea? ship
+    !ship.occupied_points.any? { |point| self.ships.select(&:persisted?).any? { |other_ship| other_ship.occupied_points.include?(point) } } 
   end
 end

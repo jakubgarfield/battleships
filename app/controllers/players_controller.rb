@@ -5,14 +5,25 @@ class PlayersController < ApplicationController
   end
 
   def show
-    player = Player.find(params[:id])
+    @player = Player.find(params[:id])
   end
 
   def create
     game = Game.find(params[:game_id])
-    player = game.players.build(params[:player].permit(:name))
-    player.generate_ships
+    player = game.players.create!(params[:player].permit(:name))
+    
+    generate_random_ships(player)
 
-    flash[:error] = player.error.full_messages.to_sentece unless game.save
+    flash[:error] = player.errors.full_messages.to_sentence unless game.save
+    redirect_to game_player_path(game, player)
+  end
+
+  protected
+  def generate_random_ships(player)
+    Player::SHIPS.each do |length| 
+      ship = player.ships.build
+      ship.randomize(length) until player.can_place_ship?(ship)
+      ship.save!
+    end
   end
 end
