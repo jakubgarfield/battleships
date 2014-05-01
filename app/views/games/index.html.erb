@@ -2,7 +2,7 @@
 
 <p>Behold the greatest ship battles of all times.</p>
 
-<% if @joinable_games.any? %>
+<% if @games.any? %>
   <table>
     <thead>
       <tr>
@@ -12,11 +12,11 @@
       </tr>
     </thead>
     <tbody>
-      <% @joinable_games.each do |game| %>
+      <% @games.each do |game| %>
         <tr>
           <td><%= link_to game.id, game_path(game) %></td>
-          <td><%= game.players.any? ? game.players.first.name : "" %></td>
-          <td><%= link_to "Start", game_players_path(game) %></td>
+          <td><%= game.players.map(&:name).join(', ') %></td>
+          <td><%= game.waiting_for_players? ? (link_to "Start", game_players_path(game)) : "Started" %></td>
         </tr>
       <% end %>
     </tbody>

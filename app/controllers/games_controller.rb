@@ -1,6 +1,6 @@
 class GamesController < ApplicationController
   def index
-    @joinable_games = Game.all.select(&:waiting_for_players?)
+    @games = Game.all
     @game = Game.new
   end
   
