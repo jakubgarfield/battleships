@@ -9,11 +9,11 @@ class Game < ActiveRecord::Base
   end
 
   def waiting_for_players?
-    self.players.length < 2
+    players.length < 2
   end
 
   def winner
-    self.players.first(&:won?)
+    players.first(&:won?)
   end
 
 end

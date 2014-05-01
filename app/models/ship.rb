@@ -8,12 +8,12 @@ class Ship < ActiveRecord::Base
     self.start_coordinate_x = rand(10)
     self.start_coordinate_y = rand(10)
     is_vertical = rand(2) == 0
-    self.end_coordinate_x = is_vertical ? self.start_coordinate_x : ending_coordinate(self.start_coordinate_x, length)
-    self.end_coordinate_y = is_vertical ? ending_coordinate(self.start_coordinate_y, length) : self.start_coordinate_y 
+    self.end_coordinate_x = is_vertical ? start_coordinate_x : ending_coordinate(start_coordinate_x, length)
+    self.end_coordinate_y = is_vertical ? ending_coordinate(start_coordinate_y, length) : start_coordinate_y 
   end
 
   def sunk?
-    occupied_points.all { |point| player.opponent.guesses.any? { |guess| guess.coordinate_x == point[0] && guess.coordinate_y == point[1] } }
+    occupied_points.all? { |point| player.opponent.guesses.any? { |guess| guess.coordinate_x == point[0] && guess.coordinate_y == point[1] } }
   end
 
   def hit?(x, y)
@@ -24,16 +24,25 @@ class Ship < ActiveRecord::Base
     x_coordinates.flat_map { |x| y_coordinates.map { |y| [x, y] } }
   end
 
+  def coordinates_in_range?
+    [start_coordinate_x, start_coordinate_y, end_coordinate_x, end_coordinate_y].all? { |coordinate| coordinate_in_range?(coordinate) }
+  end
+
+
   protected
   def x_coordinates
-    self.start_coordinate_x..self.end_coordinate_x
+    start_coordinate_x..end_coordinate_x
   end
   
   def y_coordinates
-    self.start_coordinate_y..self.end_coordinate_y
+    start_coordinate_y..end_coordinate_y
   end
 
   def ending_coordinate(start, length)
     start + length - 1
+  end
+
+  def coordinate_in_range?(coordinate)
+    coordinate && coordinate < Game::CANVAS_SIZE && coordinate >= 0
   end
 end

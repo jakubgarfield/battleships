@@ -13,20 +13,12 @@ class PlayersController < ApplicationController
     
     player = game.players.build(params[:player].permit(:name))
     player.active = game.players.length < 2
+    player.build_random_ships
     player.save!
     
-    generate_random_ships(player)
-
     flash[:error] = player.errors.full_messages.to_sentence unless game.save
     redirect_to game_player_path(game, player)
   end
 
   protected
-  def generate_random_ships(player)
-    Player::SHIPS.each do |length| 
-      ship = player.ships.build
-      ship.randomize(length) until player.can_place_ship?(ship)
-      ship.save!
-    end
-  end
 end
