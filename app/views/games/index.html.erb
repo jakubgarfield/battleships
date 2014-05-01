@@ -1,9 +1,8 @@
 <h1>Battleships</h1>
 
-<p>Behold the greatest game of all times.</p>
+<p>Behold the greatest ship battles of all times.</p>
 
 <% if @joinable_games.any? %>
-  <h2>Join</h2>
   <table>
     <thead>
       <tr>
@@ -24,7 +23,6 @@
   </table>
 <% end %>
 
-<h2>Create</h2>
 <%= form_for @game do |f| %>
-  <p><%= f.submit "Create" %></p>
+  <p><%= f.submit "Create new game" %></p>
 <% end %>
