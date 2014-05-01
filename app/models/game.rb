@@ -13,7 +13,7 @@ class Game < ActiveRecord::Base
   end
 
   def winner
-    players.first(&:won?)
+    players.find(&:won?)
   end
 
 end

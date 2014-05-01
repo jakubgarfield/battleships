@@ -13,7 +13,7 @@ class Player < ActiveRecord::Base
   end
 
   def won?
-    opponent.ships.all?(&:sunk?)
+    opponent && opponent.ships.all?(&:sunk?)
   end
 
   def can_place_ship?(ship)
