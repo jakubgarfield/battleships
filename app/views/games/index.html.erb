@@ -16,7 +16,7 @@
         <tr>
           <td><%= link_to game.id, game_path(game) %></td>
           <td><%= game.players.map(&:name).join(', ') %></td>
-          <td><%= game.waiting_for_players? ? (link_to "Start", game_players_path(game)) : "Started" %></td>
+          <td><%= game.waiting_for_players? ? (link_to "Join", game_players_path(game)) : "Started" %></td>
         </tr>
       <% end %>
     </tbody>

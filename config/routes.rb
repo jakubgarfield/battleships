@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   resources :games, :only => [:index, :show, :create] do
-    resources :players, :only => [:index, :create, :show, :update]
+    resources :players, :only => [:index, :create, :show, :update] do 
+      resources :guesses, :only => [:create]
+    end
   end
 
   root 'games#index'

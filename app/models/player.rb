@@ -3,13 +3,17 @@ class Player < ActiveRecord::Base
   has_many :guesses
   belongs_to :game
 
-  validate :game_id, :name, :active, :presence => true
+  validate :game_id, :name, :presence => true
   validate :name, :allow_blank => false 
   
   AVAILABLE_SHIP_LENGTHS = [5, 4, 3, 2, 2, 1, 1]
 
   def opponent
     game.players.select { |i| i.id != id }.first
+  end
+
+  def turn? 
+    (guesses.any? && guesses.last.correct?) || (guesses.none? && id < opponent.id)
   end
 
   def won?

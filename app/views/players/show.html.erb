@@ -1,14 +1,36 @@
 <h1><%= @player.name %></h1>
 
-<% if @player.active %>
+<% if @player.guesses.any? %>
+  <h2>Your previous guesses</h2>
+  <p>
+  <% @player.guesses.each do |guess| %>
+     [ <%= guess.coordinate_x %>, <%= guess.coordinate_y %>] <%= guess.correct? ? "*" : "-" %>
+  <% end %>
+  </p>
+<% end %>
+
+<% if @player.turn? %>
   <h2>It's your turn</h2>
+  
+  <% if flash[:error] %>
+    <p>The input is horribly wrong and here's why: <%= flash[:error] %>
+  <% end %>
+
+  <%= form_for [@player.game, @player, @player.guesses.build] do |f| %>
+    <p>Enter your guess:</p>
+    <p>X: <%= f.text_field :coordinate_x, :autofocus => true %></p>
+    <p>Y: <%= f.text_field :coordinate_y %></p>
+    <p><%= f.submit "Submit" %></p>
+  <% end %>
+
 <% else %>
   <h2>Waiting for opponent's turn</h2>
+  <%= link_to "Reload", url_for(params) %>
 <% end %>
 
 <h2>My Ships</h2>
 <ul>
 <% @player.ships.each do |ship| %>
-  <li>[<%= ship.start_coordinate_x %>, <%= ship.start_coordinate_y %>] [<%= ship.end_coordinate_x %>, <%= ship.end_coordinate_y %>]</li>
+  <li>[<%= ship.start_coordinate_x %>, <%= ship.start_coordinate_y %>] [<%= ship.end_coordinate_x %>, <%= ship.end_coordinate_y %>] <%= ship.sunk? ? "---" : "***" %></li>
 <% end %>
 </ul>
