@@ -1,1 +1,10 @@
 <h1>Battleships #<%= @game.id %></h1>
+
+<% if @game.players.any? %>
+  <h2>Existing players</h2>
+  <ul>
+  <% @game.players.each do |player| %>
+    <li><%= link_to player.name, game_player_path(@game, player) %></li>
+  <% end %>
+  </ul>
+<% end %>
