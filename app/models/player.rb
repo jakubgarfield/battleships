@@ -9,15 +9,19 @@ class Player < ActiveRecord::Base
   AVAILABLE_SHIP_LENGTHS = [5, 4, 3, 2, 2, 1, 1]
 
   def opponent
-    game.players.select { |i| i.id != id }.first
+    game.players.select { |player| player.id != id }.first
   end
 
   def turn? 
-    (guesses.any? && guesses.last.correct?) || (guesses.none? && id < opponent.id)
+    first_round? || last_guess_correct? || opponents_guess_wrong_and_newer? 
   end
 
   def won?
     opponent && opponent.ships.all?(&:sunk?)
+  end
+
+  def last_guess_correct?
+    guesses.any? && guesses.last.correct?
   end
 
   def can_place_ship?(ship)
@@ -33,6 +37,13 @@ class Player < ActiveRecord::Base
 
   
   protected
+  def first_round?
+    guesses.none? && created_at < opponent.created_at
+  end 
+
+  def opponents_guess_wrong_and_newer?
+    opponent.guesses.any? && !opponent.last_guess_correct? && (guesses.none? || guesses.last.created_at < opponent.guesses.last.created_at)
+  end
 
   def free_sea? ship
     !ship.occupied_points.any? do |point| 
