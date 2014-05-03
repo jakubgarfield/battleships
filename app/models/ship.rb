@@ -13,7 +13,7 @@ class Ship < ActiveRecord::Base
   end
 
   def sunk?
-    occupied_points.all? { |point| player.opponent.guesses.any? { |guess| guess.coordinate_x == point[0] && guess.coordinate_y == point[1] } }
+    occupied_points.all? { |point| player.opponent && player.opponent.guesses.any? { |guess| guess.coordinate_x == point[0] && guess.coordinate_y == point[1] } }
   end
 
   def hit?(x, y)

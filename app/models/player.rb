@@ -13,7 +13,7 @@ class Player < ActiveRecord::Base
   end
 
   def turn? 
-    first_round? || last_guess_correct? || opponents_guess_wrong_and_newer? 
+    opponent && (first_round? || last_guess_correct? || opponents_guess_wrong_and_newer?)
   end
 
   def won?

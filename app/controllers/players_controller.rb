@@ -6,6 +6,8 @@ class PlayersController < ApplicationController
 
   def show
     @player = Player.find(params[:id])
+
+    redirect_to game_path(@player.game) if @player.game.finished?
   end
 
   def create
