@@ -5,7 +5,7 @@ class Game < ActiveRecord::Base
   CANVAS_SIZE = 10
 
   def finished?
-    !winner.nil?
+    winner
   end
 
   def waiting_for_players?

@@ -13,7 +13,7 @@ class Player < ActiveRecord::Base
   end
 
   def turn? 
-    opponent && (first_round? || last_guess_correct? || opponents_guess_wrong_and_newer?)
+    opponent && (starts_first_round? || last_guess_correct? || opponent_guess_wrong_and_newer?)
   end
 
   def won?
@@ -37,11 +37,11 @@ class Player < ActiveRecord::Base
 
   
   protected
-  def first_round?
+  def starts_first_round?
     guesses.none? && created_at < opponent.created_at
   end 
 
-  def opponents_guess_wrong_and_newer?
+  def opponent_guess_wrong_and_newer?
     opponent.guesses.any? && !opponent.last_guess_correct? && (guesses.none? || guesses.last.created_at < opponent.guesses.last.created_at)
   end
 

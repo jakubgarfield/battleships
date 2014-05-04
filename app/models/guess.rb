@@ -5,7 +5,7 @@ class Guess < ActiveRecord::Base
   validates :coordinate_x, :coordinate_y, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0, :less_than => Game::CANVAS_SIZE }
 
   def correct?
-    player.opponent.ships.any? { |ship| ship.hit?(self.coordinate_x, self.coordinate_y) }   
+    player.opponent.ships.any? { |ship| ship.hit?(coordinate_x, coordinate_y) }   
   end
 
 end
