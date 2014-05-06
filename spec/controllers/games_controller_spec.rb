@@ -15,7 +15,6 @@ describe GamesController do
     before { Game.stub(:find => game) }
 
     subject { get :show, :id => game.id}
-    it { should be_success }
     
     context "when game is in progress" do
       it { should render_template("show") }

@@ -13,11 +13,11 @@ class Player < ActiveRecord::Base
   end
 
   def turn? 
-    opponent && (starts_first_round? || last_guess_correct? || opponent_guess_wrong_and_newer?)
+    opponent.present? && (starts_first_round? || last_guess_correct? || opponent_guess_wrong_and_newer?)
   end
 
   def won?
-    opponent && opponent.ships.all?(&:sunk?)
+    opponent.present? && opponent.ships.all?(&:sunk?)
   end
 
   def last_guess_correct?

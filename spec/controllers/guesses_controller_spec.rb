@@ -8,7 +8,8 @@ describe GuessesController do
     
     it "should add a new guess" do
       expect { post :create, create_parameters }.to change { Guess.count }.by(1)
-      expect(response).to redirect_to(game_player_path(game, player))
+      guess = Guess.last
+      expect(response).to redirect_to(game_player_path(guess.player.game, guess.player))
     end
      
     it "should add a guess and redirect to a game view when game is won" do
