@@ -2,18 +2,21 @@ class Ship < ActiveRecord::Base
   belongs_to :player
 
   validates :start_coordinate_x, :start_coordinate_y, :end_coordinate_x, :end_coordinate_y, :presence => true
-  validates :start_coordinate_x, :start_coordinate_y, :end_coordinate_x, :end_coordinate_y, :numericality => { :only_integer => true, :greater_than_or_equal_to => 0, :less_than => Game::CANVAS_SIZE }
+  validates :start_coordinate_x, :start_coordinate_y, :end_coordinate_x, :end_coordinate_y, 
+            :numericality => { :only_integer => true, :greater_than_or_equal_to => 0, :less_than => Game::CANVAS_SIZE }
 
   def randomize(length)
-    self.start_coordinate_x = rand(10)
-    self.start_coordinate_y = rand(10)
+    self.start_coordinate_x = rand(Game::CANVAS_SIZE)
+    self.start_coordinate_y = rand(Game::CANVAS_SIZE)
     is_vertical = rand(2) == 0
     self.end_coordinate_x = is_vertical ? start_coordinate_x : ending_coordinate(start_coordinate_x, length)
     self.end_coordinate_y = is_vertical ? ending_coordinate(start_coordinate_y, length) : start_coordinate_y 
   end
 
   def sunk?
-    occupied_points.all? { |point| player.opponent && player.opponent.guesses.any? { |guess| guess.coordinate_x == point[0] && guess.coordinate_y == point[1] } }
+    occupied_points.all? do |point| 
+      player.opponent && player.opponent.guesses.any? { |guess| guess.coordinate_x == point[0] && guess.coordinate_y == point[1] }
+    end
   end
 
   def hit?(x, y)
@@ -43,6 +46,6 @@ class Ship < ActiveRecord::Base
   end
 
   def coordinate_in_range?(coordinate)
-    coordinate < Game::CANVAS_SIZE && coordinate >= 0
+    (0...Game::CANVAS_SIZE).include?(coordinate)
   end
 end

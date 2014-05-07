@@ -12,7 +12,7 @@ class Player < ActiveRecord::Base
     game.players.select { |player| player.id != id }.first
   end
 
-  def turn? 
+  def current_turn? 
     opponent.present? && (starts_first_round? || last_guess_correct? || opponent_guess_wrong_and_newer?)
   end
 
@@ -38,11 +38,11 @@ class Player < ActiveRecord::Base
   
   protected
   def starts_first_round?
-    guesses.none? && created_at < opponent.created_at
+    guesses.none? && id < opponent.id
   end 
 
   def opponent_guess_wrong_and_newer?
-    opponent.guesses.any? && !opponent.last_guess_correct? && (guesses.none? || guesses.last.created_at < opponent.guesses.last.created_at)
+    opponent.guesses.any? && !opponent.last_guess_correct? && (guesses.none? || guesses.last.id < opponent.guesses.last.id)
   end
 
   def free_sea? ship

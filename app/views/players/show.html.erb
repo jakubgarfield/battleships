@@ -9,7 +9,7 @@
   </p>
 <% end %>
 
-<% if @player.turn? %>
+<% if @player.current_turn? %>
   <h2>It's your turn</h2>
   
   <% if flash[:error] %>
